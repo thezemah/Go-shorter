@@ -3,81 +3,64 @@
   <head>
     <meta charset="utf-8" />
     <title>Go-shorter — Add shortlink</title>
-    <link rel="stylesheet" href="manage.css" />
-    <style>
-      .center {
-        max-width: 480px;
-        margin: 60px auto;
-        padding: 24px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-      }
-      .center h1 {
-        margin: 0 0 8px;
-        font-size: 20px;
-      }
-      .center .lede {
-        margin: 0 0 20px;
-        color: var(--muted);
-      }
-      .center .lede code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        background: var(--bg);
-        padding: 1px 6px;
-        border-radius: 4px;
-        border: 1px solid var(--border);
-      }
-      .center form {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-      .center .actions {
-        display: flex;
-        gap: 8px;
-        justify-content: flex-end;
-      }
-      .center input[type="url"] {
-        height: 34px;
-        padding: 0 10px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        font: inherit;
-        outline: none;
-      }
-      .center input[type="url"]:focus {
-        border-color: var(--primary);
-      }
-    </style>
+    <link rel="stylesheet" href="lib/design.css" />
+    <link rel="stylesheet" href="add.css" />
   </head>
   <body>
-    <div class="center">
-      <h1 id="title">Add a shortlink</h1>
-      <p id="lede" class="lede">Pick a name and URL. You'll be able to use it as <code>go/&lt;name&gt;</code>.</p>
+    <main class="add-page">
+      <div class="bg-orb orb-a"></div>
+      <div class="bg-orb orb-b"></div>
 
-      <form id="form">
-        <div class="field">
-          <label for="name">Name</label>
-          <div class="row">
-            <span class="prefix">go/</span>
-            <input id="name" type="text" autocomplete="off" required />
+      <div class="brand top-brand">
+        <span class="brand-mark" data-icon="logo"></span>
+        <span class="brand-name">Go<span class="accent">-shorter</span></span>
+      </div>
+
+      <div class="hero-card">
+        <div id="hero-mark" class="hero-mark" data-icon="bolt"></div>
+        <h1 id="title" class="hero-title">Add a shortlink</h1>
+        <p id="lede" class="hero-lede">
+          Pick a name and a URL. You'll be able to use it as <code>go/&lt;name&gt;</code>.
+        </p>
+
+        <form id="form" class="form">
+          <label class="field">
+            Name
+            <span class="input-group">
+              <span class="prefix">go/</span>
+              <input id="name" type="text" autocomplete="off" required />
+            </span>
+          </label>
+          <label class="field">
+            Destination URL
+            <input id="url" class="input" type="url" placeholder="https://example.com" required />
+          </label>
+          <p id="error" class="error" hidden></p>
+          <div class="actions">
+            <button type="button" id="cancel" class="btn">Cancel</button>
+            <button type="submit" id="save" class="btn">Save</button>
+            <button type="submit" id="save-go" class="btn btn-primary">
+              <span data-icon="bolt"></span>Save &amp; go
+            </button>
+          </div>
+        </form>
+
+        <div id="success" class="success-state" hidden>
+          <div class="success-mark" data-icon="check"></div>
+          <h2>Saved!</h2>
+          <p id="success-lede"></p>
+          <div class="actions">
+            <button type="button" id="success-manage" class="btn">Manage all</button>
+            <button type="button" id="success-go" class="btn btn-primary">
+              <span data-icon="external"></span>Open now
+            </button>
           </div>
         </div>
-        <div class="field">
-          <label for="url">URL</label>
-          <input id="url" type="url" placeholder="https://example.com" required />
-        </div>
-        <p id="error" class="error" hidden></p>
-        <div class="actions">
-          <button type="button" id="cancel">Cancel</button>
-          <button type="submit" class="primary" id="save">Save</button>
-          <button type="submit" class="primary" id="save-go" formnovalidate>Save & Go</button>
-        </div>
-      </form>
-    </div>
+      </div>
+    </main>
 
     <script src="lib/storage.js"></script>
+    <script src="lib/ui.js"></script>
     <script src="add.js"></script>
   </body>
 </html>

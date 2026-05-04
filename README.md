@@ -56,12 +56,21 @@ Nothing leaves your machine. No analytics, no network calls.
 | `manifest.json`     | MV3 manifest                                             |
 | `background.js`     | Service worker: omnibox handler + go/ navigation hijack  |
 | `lib/storage.js`    | Shared CRUD helpers (used by SW + pages)                 |
+| `lib/design.css`    | Design tokens + base components (light/dark)             |
+| `lib/ui.js`         | Shared UI helpers: SVG icons, favicons, toasts, modal    |
 | `popup.{html,js,css}` | Toolbar popup                                          |
 | `manage.{html,js,css}` | Full management page (options page)                   |
-| `add.{html,js}`     | Add form, also shown for unknown `go/<name>` hits        |
+| `add.{html,js,css}` | Add form, also shown for unknown `go/<name>` hits        |
 | `icons/`            | Generated PNG icons + `.gen_icons.py` (regenerator)      |
 
-## Limitations (v0.1)
+## UI
+
+- Light + dark themes via `prefers-color-scheme`.
+- Real favicons next to each saved link (Chrome's `_favicon` API; first-letter fallback when unavailable).
+- Toasts for confirmations, modal for destructive actions — no native `alert()`/`confirm()`.
+- Keyboard shortcuts inside the popup and manage page: <kbd>/</kbd> focus search, <kbd>n</kbd> new shortlink, <kbd>Esc</kbd> dismiss.
+
+## Limitations (v0.2)
 
 - Only the exact `go/<name>` resolves. Trailing path segments like `go/docs/page` are not appended to the target URL.
 - No placeholder syntax (`go/jira/{ticket}` style) yet.

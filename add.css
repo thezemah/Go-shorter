@@ -1,0 +1,178 @@
+.add-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-a {
+  top: -160px;
+  left: -120px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+}
+.orb-b {
+  bottom: -200px;
+  right: -160px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+}
+@media (prefers-color-scheme: dark) {
+  .bg-orb {
+    opacity: 0.3;
+  }
+}
+
+.top-brand {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 28px;
+}
+.top-brand .brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+.top-brand .brand-name {
+  font-size: 16px;
+}
+
+.hero-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 36px 32px 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: card-rise 320ms var(--ease-out);
+}
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-mark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: var(--r-lg);
+  background: var(--brand-grad);
+  display: grid;
+  place-items: center;
+  color: white;
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.4);
+}
+.hero-mark svg {
+  width: 28px;
+  height: 28px;
+}
+
+.hero-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.hero-lede {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.hero-lede code {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 1px 6px;
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  color: var(--fg);
+}
+.hero-lede a {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+.form .actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: card-rise 320ms var(--ease-out);
+}
+.success-state .success-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(22, 163, 74, 0.12);
+  color: var(--success);
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+}
+.success-state .success-mark svg {
+  width: 28px;
+  height: 28px;
+}
+.success-state h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.success-state p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.success-state .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.success-state code {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--fg);
+}

@@ -3,63 +3,118 @@
   <head>
     <meta charset="utf-8" />
     <title>Go-shorter — Manage</title>
+    <link rel="stylesheet" href="lib/design.css" />
     <link rel="stylesheet" href="manage.css" />
   </head>
   <body>
     <main>
-      <header>
-        <h1>Go-shorter</h1>
-        <p class="subtitle">Manage your personal go-links. Type <code>go&nbsp;name</code> in the address bar to use one.</p>
+      <header class="hero">
+        <div class="brand">
+          <span class="brand-mark" data-icon="logo"></span>
+          <div>
+            <div class="brand-name">Go<span class="accent">-shorter</span></div>
+            <p class="hero-tagline">Personal go-links that resolve from the address bar.</p>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button id="export-btn" type="button" class="btn">
+            <span data-icon="download"></span>Export
+          </button>
+          <button id="import-btn" type="button" class="btn">
+            <span data-icon="upload"></span>Import
+          </button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden />
+        </div>
       </header>
 
-      <section class="add-card">
-        <h2>Add shortlink</h2>
-        <form id="add-form">
-          <div class="field">
-            <label for="add-name">Name</label>
-            <div class="row">
+      <section class="stats">
+        <div class="stat">
+          <span class="stat-label">Total</span>
+          <span id="stat-total" class="stat-value">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Total hits</span>
+          <span id="stat-hits" class="stat-value">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Most used</span>
+          <span id="stat-top" class="stat-value">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Last added</span>
+          <span id="stat-recent" class="stat-value">—</span>
+        </div>
+      </section>
+
+      <section class="card add-card">
+        <div class="card-header">
+          <h2 class="card-title">Add shortlink</h2>
+          <span class="muted-text small">
+            Tip: type <code>go&nbsp;name</code> in the address bar to use it.
+          </span>
+        </div>
+        <form id="add-form" class="add-form-grid">
+          <label class="field">
+            Name
+            <span class="input-group">
               <span class="prefix">go/</span>
               <input id="add-name" type="text" placeholder="gh" autocomplete="off" required />
-            </div>
-          </div>
-          <div class="field">
-            <label for="add-url">URL</label>
-            <input id="add-url" type="url" placeholder="https://github.com" required />
-          </div>
-          <div class="actions">
-            <button type="submit" class="primary">Save</button>
+            </span>
+          </label>
+          <label class="field url">
+            URL
+            <input id="add-url" class="input" type="url" placeholder="https://github.com" required />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <span data-icon="plus"></span>Add
+            </button>
           </div>
           <p id="add-error" class="error" hidden></p>
         </form>
       </section>
 
-      <section class="list-card">
-        <div class="toolbar">
-          <input id="search" type="search" placeholder="Search name or URL..." autocomplete="off" />
-          <div class="spacer"></div>
-          <button id="export-btn" type="button">Export JSON</button>
-          <button id="import-btn" type="button">Import JSON</button>
-          <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <section class="card list-card">
+        <div class="card-header toolbar">
+          <h2 class="card-title">Your shortlinks</h2>
+          <div class="toolbar-controls">
+            <div class="search">
+              <span class="search-icon" data-icon="search"></span>
+              <input
+                id="search"
+                class="input"
+                type="search"
+                placeholder="Search by name or URL"
+                autocomplete="off"
+              />
+            </div>
+            <select id="sort" class="select" aria-label="Sort by">
+              <option value="name-asc">Name A→Z</option>
+              <option value="name-desc">Name Z→A</option>
+              <option value="hits-desc" selected>Most used</option>
+              <option value="recent-desc">Recently used</option>
+              <option value="created-desc">Newest</option>
+              <option value="created-asc">Oldest</option>
+            </select>
+          </div>
         </div>
 
-        <table id="links-table">
-          <thead>
-            <tr>
-              <th data-sort="name">Name</th>
-              <th data-sort="url">URL</th>
-              <th data-sort="hits" class="num">Hits</th>
-              <th data-sort="lastUsed">Last used</th>
-              <th data-sort="createdAt">Created</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="links-body"></tbody>
-        </table>
-        <p id="empty" class="empty" hidden>No shortlinks yet. Add one above.</p>
+        <ul id="links-list" class="links-list" role="list"></ul>
+
+        <div id="empty" class="empty-state" hidden>
+          <div class="empty-mark" data-icon="bolt"></div>
+          <h3>No shortlinks yet</h3>
+          <p>Add your first one above. Then type <code>go name</code> in the address bar.</p>
+        </div>
       </section>
+
+      <footer class="page-footer">
+        <span>Stored locally in <code>chrome.storage.local</code>. No network calls.</span>
+      </footer>
     </main>
 
     <script src="lib/storage.js"></script>
+    <script src="lib/ui.js"></script>
     <script src="manage.js"></script>
   </body>
 </html>

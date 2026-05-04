@@ -3,37 +3,64 @@
   <head>
     <meta charset="utf-8" />
     <title>Go-shorter</title>
+    <link rel="stylesheet" href="lib/design.css" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <header>
-      <h1>Go-shorter</h1>
-      <button id="toggle-add" type="button" class="primary">+ Add</button>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" data-icon="logo"></span>
+        <span class="brand-name">Go<span class="accent">-shorter</span></span>
+      </div>
+      <button id="toggle-add" type="button" class="btn btn-primary" title="Add shortlink (N)">
+        <span data-icon="plus"></span>
+        <span>Add</span>
+      </button>
     </header>
 
-    <form id="add-form" hidden>
-      <div class="row">
-        <span class="prefix">go/</span>
-        <input id="add-name" type="text" placeholder="name" autocomplete="off" required />
-      </div>
-      <input id="add-url" type="url" placeholder="https://example.com" required />
-      <div class="actions">
-        <button type="submit" class="primary">Save</button>
-        <button id="add-cancel" type="button">Cancel</button>
-      </div>
+    <form id="add-form" class="add-form" hidden>
+      <label class="field">
+        Name
+        <span class="input-group">
+          <span class="prefix">go/</span>
+          <input id="add-name" type="text" placeholder="gh" autocomplete="off" required />
+        </span>
+      </label>
+      <label class="field">
+        URL
+        <input id="add-url" class="input" type="url" placeholder="https://github.com" required />
+      </label>
       <p id="add-error" class="error" hidden></p>
+      <div class="form-actions">
+        <button id="add-cancel" type="button" class="btn">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <span data-icon="check"></span>Save
+        </button>
+      </div>
     </form>
 
-    <input id="search" type="search" placeholder="Search..." autocomplete="off" />
+    <div class="search">
+      <span class="search-icon" data-icon="search"></span>
+      <input id="search" class="input" type="search" placeholder="Search shortlinks..." autocomplete="off" />
+    </div>
 
-    <ul id="list" class="list"></ul>
-    <p id="empty" class="empty" hidden>No shortlinks yet. Click "+ Add" to create one.</p>
+    <ul id="list" class="list" role="list"></ul>
 
-    <footer>
-      <a href="#" id="open-manage">Manage all →</a>
+    <section id="empty" class="empty-state" hidden>
+      <div class="empty-mark" data-icon="bolt"></div>
+      <h3>No shortlinks yet</h3>
+      <p>Click <strong>Add</strong> to save your first one.</p>
+    </section>
+
+    <footer class="footer">
+      <span id="count" class="muted-text"></span>
+      <button id="open-manage" type="button" class="btn btn-ghost">
+        Manage all <span data-icon="arrow"></span>
+      </button>
     </footer>
 
     <script src="lib/storage.js"></script>
+    <script src="lib/ui.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
