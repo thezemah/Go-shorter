@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "description": "Personal go-links: turn go/<name> into your saved URLs.",
   "permissions": ["storage", "webNavigation", "tabs"],
-  "host_permissions": ["*://go/*"],
   "background": {
     "service_worker": "background.js"
   },

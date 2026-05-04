@@ -18,8 +18,12 @@ No build step — it's plain HTML/CSS/JS using Chrome's MV3 APIs.
 - Or open the full **Manage** page from the popup footer (also via `chrome://extensions` → Go-shorter → "Extension options").
 
 ### Visit a shortlink
-- **Recommended**: type `go` in the address bar, press <kbd>Tab</kbd> or <kbd>Space</kbd>, then the name and <kbd>Enter</kbd>. This uses the omnibox keyword and is 100% reliable.
-- **Also works**: type `go/<name>` and press <kbd>Enter</kbd>. Chrome may treat single-word entries as a search the first time; if so, append a trailing `/` (so `go/gh/`) or accept the navigation suggestion. After Chrome learns `go/` is a host it tends to keep doing so.
+Both of these work out of the box — **no `/etc/hosts` or DNS changes required**:
+
+- Type `go/<name>` and press <kbd>Enter</kbd>. Chrome sends that text to your default search engine; the extension catches the search navigation, recognizes the `go/<name>` pattern in the query, and redirects the tab to your saved URL before the search results render.
+- Or use the omnibox keyword: type `go`, press <kbd>Tab</kbd> or <kbd>Space</kbd>, then the name and <kbd>Enter</kbd>.
+
+How the search-redirect path works: any default search engine that puts the typed text into a query parameter (`q`, `query`, `p`, `text`, or `wd` — covers Google, Bing, DuckDuckGo, Brave, Yahoo, Yandex, Baidu, etc.) is supported. The service worker's `chrome.webNavigation.onBeforeNavigate` listener inspects each top-frame navigation, extracts the query, and rewrites the URL when it matches.
 
 ### Unknown shortlinks
 Visit `go/somethingnew` and the extension opens its **Add** page with the name pre-filled. Save it and you're done.
