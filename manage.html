@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Go-shorter — Manage</title>
+    <link rel="stylesheet" href="manage.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Go-shorter</h1>
+        <p class="subtitle">Manage your personal go-links. Type <code>go&nbsp;name</code> in the address bar to use one.</p>
+      </header>
+
+      <section class="add-card">
+        <h2>Add shortlink</h2>
+        <form id="add-form">
+          <div class="field">
+            <label for="add-name">Name</label>
+            <div class="row">
+              <span class="prefix">go/</span>
+              <input id="add-name" type="text" placeholder="gh" autocomplete="off" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="add-url">URL</label>
+            <input id="add-url" type="url" placeholder="https://github.com" required />
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">Save</button>
+          </div>
+          <p id="add-error" class="error" hidden></p>
+        </form>
+      </section>
+
+      <section class="list-card">
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Search name or URL..." autocomplete="off" />
+          <div class="spacer"></div>
+          <button id="export-btn" type="button">Export JSON</button>
+          <button id="import-btn" type="button">Import JSON</button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden />
+        </div>
+
+        <table id="links-table">
+          <thead>
+            <tr>
+              <th data-sort="name">Name</th>
+              <th data-sort="url">URL</th>
+              <th data-sort="hits" class="num">Hits</th>
+              <th data-sort="lastUsed">Last used</th>
+              <th data-sort="createdAt">Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="links-body"></tbody>
+        </table>
+        <p id="empty" class="empty" hidden>No shortlinks yet. Add one above.</p>
+      </section>
+    </main>
+
+    <script src="lib/storage.js"></script>
+    <script src="manage.js"></script>
+  </body>
+</html>

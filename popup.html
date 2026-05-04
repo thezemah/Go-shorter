@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Go-shorter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Go-shorter</h1>
+      <button id="toggle-add" type="button" class="primary">+ Add</button>
+    </header>
+
+    <form id="add-form" hidden>
+      <div class="row">
+        <span class="prefix">go/</span>
+        <input id="add-name" type="text" placeholder="name" autocomplete="off" required />
+      </div>
+      <input id="add-url" type="url" placeholder="https://example.com" required />
+      <div class="actions">
+        <button type="submit" class="primary">Save</button>
+        <button id="add-cancel" type="button">Cancel</button>
+      </div>
+      <p id="add-error" class="error" hidden></p>
+    </form>
+
+    <input id="search" type="search" placeholder="Search..." autocomplete="off" />
+
+    <ul id="list" class="list"></ul>
+    <p id="empty" class="empty" hidden>No shortlinks yet. Click "+ Add" to create one.</p>
+
+    <footer>
+      <a href="#" id="open-manage">Manage all →</a>
+    </footer>
+
+    <script src="lib/storage.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
