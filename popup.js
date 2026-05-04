@@ -1,53 +1,54 @@
 UI.injectIcons();
 
+const RECENT_LIMIT = 5;
+
 const listEl = document.getElementById("list");
+const recentEl = document.getElementById("recent-section");
 const emptyEl = document.getElementById("empty");
-const countEl = document.getElementById("count");
-const searchEl = document.getElementById("search");
-const addFormEl = document.getElementById("add-form");
-const addNameEl = document.getElementById("add-name");
-const addUrlEl = document.getElementById("add-url");
-const addErrorEl = document.getElementById("add-error");
-const toggleAddEl = document.getElementById("toggle-add");
-const addCancelEl = document.getElementById("add-cancel");
+const totalEl = document.getElementById("total");
+const addBtn = document.getElementById("add-btn");
 const openManageEl = document.getElementById("open-manage");
 
-let allLinks = {};
-
 async function refresh() {
-  allLinks = await Storage.getAll();
-  render();
+  const all = await Storage.getAll();
+  render(all);
 }
 
-function render() {
-  const query = searchEl.value.trim().toLowerCase();
-  const allNames = Object.keys(allLinks);
-  const filtered = allNames
-    .filter((n) => !query || n.includes(query) || allLinks[n].url.toLowerCase().includes(query))
-    .sort((a, b) => {
-      const ah = allLinks[a].hits || 0;
-      const bh = allLinks[b].hits || 0;
-      if (ah !== bh) return bh - ah;
-      return a.localeCompare(b);
-    });
+function render(all) {
+  const entries = Object.entries(all);
+  const total = entries.length;
+
+  if (total === 0) {
+    recentEl.hidden = true;
+    emptyEl.hidden = false;
+    totalEl.textContent = "";
+    return;
+  }
+
+  emptyEl.hidden = true;
+  recentEl.hidden = false;
+
+  const recents = entries
+    .map(([name, e]) => ({ name, ...e, sortKey: e.lastUsed || e.createdAt || 0 }))
+    .sort((a, b) => b.sortKey - a.sortKey)
+    .slice(0, RECENT_LIMIT);
 
   listEl.innerHTML = "";
-  if (allNames.length === 0) {
-    emptyEl.hidden = false;
-    countEl.textContent = "";
+  for (const row of recents) listEl.appendChild(renderRow(row));
+
+  if (total > RECENT_LIMIT) {
+    totalEl.textContent = ` (${total})`;
   } else {
-    emptyEl.hidden = true;
-    countEl.textContent = `${filtered.length} of ${allNames.length}`;
-    for (const name of filtered) listEl.appendChild(renderRow(name, allLinks[name]));
+    totalEl.textContent = ` (${total})`;
   }
 }
 
-function renderRow(name, entry) {
+function renderRow(row) {
   const li = document.createElement("li");
   li.className = "list-row";
   li.tabIndex = 0;
 
-  const fav = UI.faviconElement(entry.url, name);
+  const fav = UI.faviconElement(row.url, row.name);
 
   const info = document.createElement("div");
   info.className = "info";
@@ -56,11 +57,11 @@ function renderRow(name, entry) {
   const prefix = document.createElement("span");
   prefix.className = "name-prefix";
   prefix.textContent = "go/";
-  nameEl.append(prefix, document.createTextNode(name));
+  nameEl.append(prefix, document.createTextNode(row.name));
 
   const urlEl = document.createElement("span");
   urlEl.className = "url";
-  urlEl.textContent = entry.url;
+  urlEl.textContent = row.url;
   info.append(nameEl, urlEl);
 
   const actions = document.createElement("div");
@@ -69,25 +70,25 @@ function renderRow(name, entry) {
   actions.append(
     iconButton("copy", "Copy URL", async (e) => {
       e.stopPropagation();
-      await navigator.clipboard.writeText(entry.url);
+      await navigator.clipboard.writeText(row.url);
       UI.toast("URL copied", { icon: "check" });
     }),
     iconButton("external", "Open in new tab", (e) => {
       e.stopPropagation();
-      chrome.tabs.create({ url: entry.url });
-      Storage.recordHit(name);
+      chrome.tabs.create({ url: row.url });
+      Storage.recordHit(row.name);
     }),
     iconButton("trash", "Delete", async (e) => {
       e.stopPropagation();
       const ok = await UI.confirmModal({
         title: "Delete shortlink?",
-        message: `go/${name} will be permanently removed.`,
+        message: `go/${row.name} will be permanently removed.`,
         confirmLabel: "Delete",
         danger: true,
       });
       if (ok) {
-        await Storage.remove(name);
-        UI.toast(`Deleted go/${name}`);
+        await Storage.remove(row.name);
+        UI.toast(`Deleted go/${row.name}`);
       }
     }),
   );
@@ -95,8 +96,8 @@ function renderRow(name, entry) {
   li.append(fav, info, actions);
 
   li.addEventListener("click", () => {
-    Storage.recordHit(name);
-    chrome.tabs.update({ url: entry.url });
+    Storage.recordHit(row.name);
+    chrome.tabs.update({ url: row.url });
     window.close();
   });
   li.addEventListener("keydown", (e) => {
@@ -117,54 +118,14 @@ function iconButton(iconName, title, onClick) {
   return b;
 }
 
-function showAddForm(show) {
-  addFormEl.hidden = !show;
-  addErrorEl.hidden = true;
-  addErrorEl.textContent = "";
-  if (show) {
-    addNameEl.value = "";
-    addUrlEl.value = "";
-    setTimeout(() => addNameEl.focus(), 30);
-  }
-}
-
-toggleAddEl.addEventListener("click", () => showAddForm(addFormEl.hidden));
-addCancelEl.addEventListener("click", () => showAddForm(false));
-
-addFormEl.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  try {
-    const name = addNameEl.value.trim().toLowerCase();
-    await Storage.set(name, addUrlEl.value);
-    showAddForm(false);
-    UI.toast(`Added go/${name}`, { icon: "check" });
-  } catch (err) {
-    addErrorEl.innerHTML = `${UI.icon("close")} <span></span>`;
-    addErrorEl.querySelector("span").textContent = err.message;
-    addErrorEl.hidden = false;
-  }
+addBtn.addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("add.html") });
+  window.close();
 });
 
-addFormEl.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") showAddForm(false);
-});
-
-searchEl.addEventListener("input", render);
-
-document.addEventListener("keydown", (e) => {
-  if (e.target === addNameEl || e.target === addUrlEl || e.target === searchEl) return;
-  if (e.key === "/" || e.key === "f") {
-    e.preventDefault();
-    searchEl.focus();
-  } else if (e.key === "n") {
-    e.preventDefault();
-    showAddForm(true);
-  }
-});
-
-openManageEl.addEventListener("click", (e) => {
-  e.preventDefault();
+openManageEl.addEventListener("click", () => {
   chrome.runtime.openOptionsPage();
+  window.close();
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {

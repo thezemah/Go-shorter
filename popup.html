@@ -12,50 +12,29 @@
         <span class="brand-mark" data-icon="logo"></span>
         <span class="brand-name">Go<span class="accent">-shorter</span></span>
       </div>
-      <button id="toggle-add" type="button" class="btn btn-primary" title="Add shortlink (N)">
+      <button id="add-btn" type="button" class="btn btn-primary" title="Add shortlink">
         <span data-icon="plus"></span>
         <span>Add</span>
       </button>
     </header>
 
-    <form id="add-form" class="add-form" hidden>
-      <label class="field">
-        Name
-        <span class="input-group">
-          <span class="prefix">go/</span>
-          <input id="add-name" type="text" placeholder="gh" autocomplete="off" required />
-        </span>
-      </label>
-      <label class="field">
-        URL
-        <input id="add-url" class="input" type="url" placeholder="https://github.com" required />
-      </label>
-      <p id="add-error" class="error" hidden></p>
-      <div class="form-actions">
-        <button id="add-cancel" type="button" class="btn">Cancel</button>
-        <button type="submit" class="btn btn-primary">
-          <span data-icon="check"></span>Save
-        </button>
+    <section id="recent-section" class="recent" hidden>
+      <div class="section-head">
+        <h2 class="section-title">Recently used</h2>
       </div>
-    </form>
-
-    <div class="search">
-      <span class="search-icon" data-icon="search"></span>
-      <input id="search" class="input" type="search" placeholder="Search shortlinks..." autocomplete="off" />
-    </div>
-
-    <ul id="list" class="list" role="list"></ul>
+      <ul id="list" class="list" role="list"></ul>
+    </section>
 
     <section id="empty" class="empty-state" hidden>
       <div class="empty-mark" data-icon="bolt"></div>
       <h3>No shortlinks yet</h3>
-      <p>Click <strong>Add</strong> to save your first one.</p>
+      <p>Click <strong>Add</strong> to create your first one.</p>
     </section>
 
     <footer class="footer">
-      <span id="count" class="muted-text"></span>
-      <button id="open-manage" type="button" class="btn btn-ghost">
-        Manage all <span data-icon="arrow"></span>
+      <button id="open-manage" type="button" class="btn btn-ghost manage-link">
+        <span>View all<span id="total"></span></span>
+        <span data-icon="arrow"></span>
       </button>
     </footer>
 
