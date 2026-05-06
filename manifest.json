@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Go-shorter",
   "version": "1.0.0",
-  "description": "Personal go-links for your browser. Type go/name in the address bar to jump to any saved URL instantly. No DNS setup. Data is local.",
+  "description": "Personal go-links for your browser. Type go/name in the address bar to jump to any saved URL instantly. Data is local.",
   "homepage_url": "https://github.com/thezemah/Go-shorter",
   "permissions": ["storage", "webNavigation", "tabs", "favicon"],
   "background": {
