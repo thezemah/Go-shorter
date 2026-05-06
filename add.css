@@ -21,14 +21,14 @@
   left: -120px;
   width: 420px;
   height: 420px;
-  background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+  background: radial-gradient(circle, #1d4ed8 0%, transparent 70%);
 }
 .orb-b {
   bottom: -200px;
   right: -160px;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+  background: radial-gradient(circle, #2563eb 0%, transparent 70%);
 }
 @media (prefers-color-scheme: dark) {
   .bg-orb {
@@ -44,7 +44,6 @@
 .top-brand .brand-mark {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
 }
 .top-brand .brand-name {
   font-size: 16px;
@@ -77,13 +76,16 @@
 .hero-mark {
   width: 56px;
   height: 56px;
-  margin: 0 auto 16px;
+  margin: 0 auto;
   border-radius: var(--r-lg);
   background: var(--brand-grad);
   display: grid;
   place-items: center;
   color: white;
-  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.4);
+}
+.hero-mark:empty {
+  display: none;
 }
 .hero-mark svg {
   width: 28px;

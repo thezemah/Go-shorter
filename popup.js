@@ -36,11 +36,7 @@ function render(all) {
   listEl.innerHTML = "";
   for (const row of recents) listEl.appendChild(renderRow(row));
 
-  if (total > RECENT_LIMIT) {
-    totalEl.textContent = ` (${total})`;
-  } else {
-    totalEl.textContent = ` (${total})`;
-  }
+  totalEl.textContent = ` (${total})`;
 }
 
 function renderRow(row) {
@@ -70,8 +66,12 @@ function renderRow(row) {
   actions.append(
     iconButton("copy", "Copy URL", async (e) => {
       e.stopPropagation();
-      await navigator.clipboard.writeText(row.url);
-      UI.toast("URL copied", { icon: "check" });
+      try {
+        await navigator.clipboard.writeText(row.url);
+        UI.toast("URL copied", { icon: "check" });
+      } catch {
+        UI.toast("Failed to copy URL", { error: true });
+      }
     }),
     iconButton("external", "Open in new tab", (e) => {
       e.stopPropagation();
@@ -101,7 +101,7 @@ function renderRow(row) {
     window.close();
   });
   li.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") li.click();
+    if (e.key === "Enter" || e.key === " ") li.click();
   });
 
   return li;

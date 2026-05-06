@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Go-shorter",
-  "version": "0.2.0",
-  "description": "Personal go-links: turn go/<name> into your saved URLs.",
+  "version": "1.0.0",
+  "description": "Personal go-links for your browser. Save shortcuts like go/gh → github.com and reach them from the address bar — no DNS changes needed. All data stays on your device.",
+  "homepage_url": "https://github.com/thezemah/Go-shorter",
   "permissions": ["storage", "webNavigation", "tabs", "favicon"],
   "background": {
     "service_worker": "background.js"

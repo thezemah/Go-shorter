@@ -131,8 +131,12 @@ function renderRow(row) {
   actions.className = "actions";
   actions.append(
     iconButton("copy", "Copy URL", async () => {
-      await navigator.clipboard.writeText(row.url);
-      UI.toast("URL copied", { icon: "check" });
+      try {
+        await navigator.clipboard.writeText(row.url);
+        UI.toast("URL copied", { icon: "check" });
+      } catch {
+        UI.toast("Failed to copy URL", { error: true });
+      }
     }),
     iconButton("edit", "Edit", () => openEditModal(row)),
     iconButton("trash", "Delete", async () => {

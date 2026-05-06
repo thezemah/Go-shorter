@@ -15,11 +15,6 @@ main {
 .hero .brand-mark {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
-}
-.hero .brand-mark svg {
-  width: 22px;
-  height: 22px;
 }
 .hero .brand-name {
   font-size: 22px;

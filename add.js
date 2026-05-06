@@ -22,7 +22,7 @@ let saveAndGo = false;
 let savedUrl = null;
 
 if (requestedName) {
-  heroMarkEl.innerHTML = UI.icon("sparkle");
+  heroMarkEl.hidden = true;
   titleEl.textContent = `“go/${requestedName}” isn't set up yet`;
   ledeEl.innerHTML = `Add a destination URL and the next time you type <code>go ${escapeHtml(requestedName)}</code> it'll just work.`;
   nameEl.value = requestedName;

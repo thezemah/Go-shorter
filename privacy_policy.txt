@@ -1,0 +1,13 @@
+Privacy Policy for Go-shorter
+Last updated: 2026-05-06
+
+Go-shorter does not collect, transmit, or share any personal data.
+
+All shortlinks you create are stored exclusively on your local device using
+Chrome's storage.local API. No data is sent to any external server. No
+analytics, telemetry, or usage tracking of any kind is performed.
+
+You can export your shortlinks at any time as a JSON file and delete them
+permanently through the Manage page or by uninstalling the extension.
+
+If you have questions, contact: thehubeza@gmail.com

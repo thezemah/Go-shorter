@@ -95,6 +95,13 @@ body {
   color: var(--fg);
 }
 
+#add-btn {
+  border-radius: var(--r-full);
+  height: 36px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
 .footer {
   border-top: 1px solid var(--border);
   padding: 6px 8px;

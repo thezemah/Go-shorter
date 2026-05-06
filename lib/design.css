@@ -5,10 +5,10 @@
   color-scheme: light dark;
 
   /* Brand */
-  --brand-1: #6366f1;
-  --brand-2: #8b5cf6;
-  --brand-grad: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  --brand-grad-soft: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+  --brand-1: #2563eb;
+  --brand-2: #3b82f6;
+  --brand-grad: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+  --brand-grad-soft: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
 
   /* Light surface */
   --bg: #fafafa;
@@ -21,16 +21,16 @@
   --border-strong: #d4d4d8;
 
   /* Semantic */
-  --primary: #6366f1;
+  --primary: #2563eb;
   --primary-fg: #ffffff;
-  --primary-hover: #4f46e5;
+  --primary-hover: #1d4ed8;
   --danger: #dc2626;
   --danger-soft: #fef2f2;
   --success: #16a34a;
   --warning: #d97706;
 
   /* Effects */
-  --ring: 0 0 0 4px rgba(99, 102, 241, 0.18);
+  --ring: 0 0 0 4px rgba(37, 99, 235, 0.18);
   --shadow-sm: 0 1px 2px rgba(15, 15, 20, 0.05), 0 1px 1px rgba(15, 15, 20, 0.03);
   --shadow-md: 0 4px 12px rgba(15, 15, 20, 0.06), 0 2px 4px rgba(15, 15, 20, 0.04);
   --shadow-lg: 0 12px 32px rgba(15, 15, 20, 0.10), 0 4px 8px rgba(15, 15, 20, 0.05);
@@ -67,7 +67,7 @@
 
     --danger-soft: #2a1416;
 
-    --ring: 0 0 0 4px rgba(139, 92, 246, 0.28);
+    --ring: 0 0 0 4px rgba(59, 130, 246, 0.28);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
     --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55), 0 6px 16px rgba(0, 0, 0, 0.4);
@@ -105,7 +105,7 @@ a:hover {
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.25);
+  background: rgba(37, 99, 235, 0.25);
 }
 
 /* Brand mark — gradient logo block */
@@ -118,16 +118,9 @@ a:hover {
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: var(--brand-grad);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
   flex-shrink: 0;
-}
-.brand-mark svg {
-  width: 16px;
-  height: 16px;
-  color: white;
+  display: block;
+  object-fit: contain;
 }
 .brand-name {
   font-weight: 700;
@@ -181,7 +174,7 @@ a:hover {
   background: var(--brand-grad);
   color: var(--primary-fg);
   border-color: transparent;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 6px 16px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 .btn-primary:hover {
   filter: brightness(1.05);
@@ -408,7 +401,7 @@ label.field > .input-group {
   font-family: var(--font);
   font-size: 12px;
   font-weight: 700;
-  color: var(--brand-1);
+  color: var(--brand-2);
   letter-spacing: -0.02em;
 }
 
