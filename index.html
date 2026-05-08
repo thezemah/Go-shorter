@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Go-shorter — Personal go-links for your browser</title>
+  <meta name="description" content="Type go/name in your address bar to jump to any saved URL instantly. 100% local, no sign-up required." />
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #2f81f7;
+      --accent-hover: #58a6ff;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(13,17,23,.85);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(47,129,247,.12);
+      border: 1px solid rgba(47,129,247,.3);
+      color: var(--accent-hover);
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .25rem .75rem;
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .badge .dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .4; }
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 1.25rem;
+    }
+    h1 span { color: var(--accent-hover); }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+    .cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .7rem 1.6rem;
+      border-radius: var(--radius);
+      font-size: .95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .15s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid transparent;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); background: var(--surface); }
+
+    /* DEMO BAR */
+    .demo-wrap {
+      max-width: 620px;
+      margin: 3.5rem auto 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .demo-bar-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1rem;
+      background: #21262d;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot-r { width:12px;height:12px;border-radius:50%;background:#ff5f57; }
+    .dot-y { width:12px;height:12px;border-radius:50%;background:#febc2e; }
+    .dot-g { width:12px;height:12px;border-radius:50%;background:#28c840; }
+    .demo-url {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .25rem .75rem;
+      font-size: .85rem;
+      color: var(--muted);
+      font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .demo-url .typing {
+      color: var(--text);
+      border-right: 2px solid var(--accent);
+      animation: blink .8s step-end infinite;
+    }
+    @keyframes blink { 50% { border-color: transparent; } }
+    .demo-content {
+      padding: 1.5rem;
+      font-size: .9rem;
+      color: var(--muted);
+      text-align: left;
+    }
+    .demo-content strong { color: var(--text); }
+    .arrow { color: var(--accent); font-weight: 700; }
+
+    /* FEATURES */
+    .section { max-width: 960px; margin: 5rem auto; padding: 0 2rem; }
+    .section-label {
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+    .section h2 {
+      text-align: center;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 3rem;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color .15s, transform .15s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .feature-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      background: rgba(47,129,247,.12);
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: .4rem; }
+    .feature-card p { font-size: .875rem; color: var(--muted); }
+
+    /* INSTALL */
+    .install-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      counter-reset: step;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      position: relative;
+    }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      top: -14px;
+      left: 1.25rem;
+      background: var(--accent);
+      color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .step h3 { font-size: .95rem; font-weight: 600; margin-bottom: .35rem; margin-top: .25rem; }
+    .step p { font-size: .85rem; color: var(--muted); }
+    kbd {
+      background: #21262d;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .1rem .35rem;
+      font-size: .8rem;
+      font-family: "SF Mono", Consolas, monospace;
+      color: var(--text);
+    }
+
+    /* PRIVACY */
+    .privacy-banner {
+      max-width: 700px;
+      margin: 0 auto;
+      background: rgba(63,185,80,.07);
+      border: 1px solid rgba(63,185,80,.25);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .privacy-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .privacy-banner h3 { font-size: 1rem; font-weight: 600; margin-bottom: .3rem; }
+    .privacy-banner p { font-size: .875rem; color: var(--muted); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="7" fill="#2f81f7"/>
+        <text x="5" y="21" font-size="16" font-weight="800" fill="white" font-family="system-ui">go</text>
+      </svg>
+      Go-shorter
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/thezemah/Go-shorter" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span>Free &amp; Open Source</div>
+    <h1>Your personal<br/><span>go-links</span> in the browser</h1>
+    <p class="hero-sub">
+      Type <code style="color:var(--accent-hover);background:rgba(47,129,247,.12);padding:.1em .4em;border-radius:4px">go/name</code>
+      in the address bar to jump to any saved URL instantly.
+      No DNS changes, no servers, 100% local.
+    </p>
+    <div class="cta-group">
+      <a class="btn btn-primary" href="https://github.com/thezemah/Go-shorter/releases/latest/download/Go-shorter.crx">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78a.75.75 0 001.06 0l3.75-3.75a.75.75 0 00-1.06-1.06L8.75 8.44V1.75a.75.75 0 00-1.5 0v6.69L4.78 5.97a.75.75 0 00-1.06 1.06l3.75 3.75zM1.75 13.5a.75.75 0 000 1.5h12.5a.75.75 0 000-1.5H1.75z"/></svg>
+        Download .crx
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/thezemah/Go-shorter" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+
+    <!-- Demo bar -->
+    <div class="demo-wrap">
+      <div class="demo-bar-top">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="demo-url">go/<span class="typing">gh</span></div>
+      </div>
+      <div class="demo-content">
+        <p><strong>go/gh</strong> <span class="arrow">→</span> https://github.com</p>
+        <p><strong>go/cal</strong> <span class="arrow">→</span> https://calendar.google.com</p>
+        <p><strong>go/jira</strong> <span class="arrow">→</span> https://yourcompany.atlassian.net</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">Why Go-shorter</p>
+    <h2>Everything you need, nothing you don't</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant navigation</h3>
+        <p>Type <kbd>go/name</kbd> directly in the address bar — no search results, no redirects through a server.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>100% local</h3>
+        <p>All data lives in <code style="font-size:.82rem">chrome.storage.local</code>. Nothing ever leaves your machine.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✍️</div>
+        <h3>On-the-fly capture</h3>
+        <p>Visit an unknown <kbd>go/link</kbd> and the Add form opens pre-filled — capture new links without breaking your flow.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗂️</div>
+        <h3>Full management</h3>
+        <p>Search, edit, delete, import and export all your shortlinks as JSON from the built-in Manage page.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌗</div>
+        <h3>Light &amp; dark theme</h3>
+        <p>Automatically follows your system preference via <code style="font-size:.82rem">prefers-color-scheme</code>.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>Works with any search engine</h3>
+        <p>Google, Bing, DuckDuckGo, Brave, Yahoo, Yandex, Baidu — any engine with a standard query parameter is supported.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="section">
+    <div class="privacy-banner">
+      <div class="privacy-icon">🛡️</div>
+      <div>
+        <h3>Your data stays on your device</h3>
+        <p>Go-shorter makes zero network requests of its own. No analytics, no telemetry, no accounts. Use Export / Import in the Manage page to back up or transfer your links between devices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="section" id="install">
+    <p class="section-label">Get started</p>
+    <h2>Install in 3 steps</h2>
+    <div class="install-steps">
+      <div class="step">
+        <h3>Download the extension</h3>
+        <p>Grab <strong>Go-shorter.crx</strong> from the <a href="https://github.com/thezemah/Go-shorter/releases/latest" style="color:var(--accent-hover)">latest release</a>.</p>
+      </div>
+      <div class="step">
+        <h3>Enable Developer mode</h3>
+        <p>Open <kbd>chrome://extensions</kbd> and toggle <strong>Developer mode</strong> in the top-right corner.</p>
+      </div>
+      <div class="step">
+        <h3>Drag &amp; drop</h3>
+        <p>Drag the <code style="font-size:.82rem">.crx</code> file onto the extensions page. Click <strong>Add extension</strong> when prompted.</p>
+      </div>
+      <div class="step">
+        <h3>Start using go-links</h3>
+        <p>Click the toolbar icon, add a shortlink, then type <kbd>go/name</kbd> in the address bar!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      Built with ❤️ by <a href="https://github.com/thezemah" target="_blank">thezemah</a> &nbsp;·&nbsp;
+      <a href="https://github.com/thezemah/Go-shorter" target="_blank">Source on GitHub</a> &nbsp;·&nbsp;
+      <a href="https://github.com/thezemah/Go-shorter/releases" target="_blank">Releases</a>
+    </p>
+  </footer>
+
+</body>
+</html>
