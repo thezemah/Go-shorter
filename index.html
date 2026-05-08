@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Go-shorter — Personal go-links for your browser</title>
   <meta name="description" content="Type go/name in your address bar to jump to any saved URL instantly. 100% local, no sign-up required." />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/icon-48.png" />
+  <link rel="icon" type="image/png" sizes="128x128" href="icons/icon-128.png" />
+  <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png" />
+  <meta property="og:title" content="Go-shorter — Personal go-links for your browser" />
+  <meta property="og:description" content="Type go/name in your address bar to jump to any saved URL instantly. 100% local, no sign-up required." />
+  <meta property="og:image" content="https://thezemah.github.io/Go-shorter/icons/icon-128.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thezemah.github.io/Go-shorter/" />
   <style>
     :root {
       --bg: #0d1117;
@@ -49,7 +59,7 @@
       text-decoration: none;
       color: var(--text);
     }
-    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-logo img { width: 28px; height: 28px; border-radius: 7px; }
     .nav-links { display: flex; gap: 1.5rem; }
     .nav-links a {
       color: var(--muted);
@@ -296,10 +306,7 @@
   <!-- NAV -->
   <nav>
     <a class="nav-logo" href="#">
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="28" height="28" rx="7" fill="#2f81f7"/>
-        <text x="5" y="21" font-size="16" font-weight="800" fill="white" font-family="system-ui">go</text>
-      </svg>
+      <img src="icons/icon-128.png" alt="Go-shorter icon" />
       Go-shorter
     </a>
     <div class="nav-links">
