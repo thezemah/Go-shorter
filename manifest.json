@@ -2,10 +2,10 @@
   "manifest_version": 3,
   "name": "Go-shorter",
   "short_name": "Go-shorter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Personal go-links for your browser. Type go/name in the address bar to jump to any saved URL instantly. Data is local.",
   "homepage_url": "https://thezemah.github.io/Go-shorter/",
-  "permissions": ["storage", "webNavigation", "tabs", "favicon"],
+  "permissions": ["storage", "webNavigation", "favicon"],
   "background": {
     "service_worker": "background.js"
   },
